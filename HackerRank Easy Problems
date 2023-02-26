@@ -1,0 +1,20 @@
+-- Challenge: "African Cities"
+-- Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+
+select
+    city.name
+from city
+left join country
+on city.countrycode = country.code
+where country.continent = 'Africa';
+
+-- Challenge: "Average Population of Each Continent"
+-- Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+
+select
+    country.continent,
+    floor(avg(city.population))
+from country
+inner join city
+on country.code = city.countrycode
+group by country.continent;
