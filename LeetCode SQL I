@@ -36,3 +36,26 @@ from Customers
 where id not in (
     select customerId from Orders
 );
+
+-- Problem 627: Swap Salary
+-- Write an SQL query to swap all 'f' and 'm' values (i.e., change all 
+-- 'f' values to 'm' and vice versa) with a single update statement 
+-- and no intermediate temporary tables.
+
+update Salary 
+set sex =
+    case 
+        when sex = 'm' then 'f'
+        when sex = 'f' then 'm'
+end;
+
+-- Problem 196. Delete Duplicate Emails
+-- Write an SQL query to delete all the duplicate emails, keeping only 
+-- one unique email with the smallest id. Note that you are supposed 
+-- to write a DELETE statement and not a SELECT one.
+
+delete t1 from Person t1
+inner join Person t2
+where
+    t1.id > t2.id
+    and t1.email = t2.email;
