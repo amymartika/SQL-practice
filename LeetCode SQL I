@@ -37,6 +37,24 @@ where id not in (
     select customerId from Orders
 );
 
+-- Problem 1873: Calculate Special Bonus
+-- Write an SQL query to calculate the bonus of each employee. 
+-- The bonus of an employee is 100% of their salary if the ID of the 
+-- employee is an odd number and the employee name does not start with 
+-- the character 'M'. The bonus of an employee is 0 otherwise.
+-- Return the result table ordered by employee_id.
+
+select 
+    employee_id,
+    case
+        when (employee_id % 2) <> 0
+            and name not like 'M%'
+            then salary
+        else 0
+        end as bonus
+from Employees
+order by employee_id;
+
 -- Problem 627: Swap Salary
 -- Write an SQL query to swap all 'f' and 'm' values (i.e., change all 
 -- 'f' values to 'm' and vice versa) with a single update statement 
@@ -49,7 +67,7 @@ set sex =
         when sex = 'f' then 'm'
 end;
 
--- Problem 196. Delete Duplicate Emails
+-- Problem 196: Delete Duplicate Emails
 -- Write an SQL query to delete all the duplicate emails, keeping only 
 -- one unique email with the smallest id. Note that you are supposed 
 -- to write a DELETE statement and not a SELECT one.
@@ -59,3 +77,29 @@ inner join Person t2
 where
     t1.id > t2.id
     and t1.email = t2.email;
+
+-- Problem 1667: Fix Names in a Table
+-- Write an SQL query to fix the names so that only the first character 
+-- is uppercase and the rest are lowercase.
+-- Return the result table ordered by user_id.
+
+select
+    user_id,
+    concat(upper(substr(name, 1, 1)), 
+        lower(substr(name, 2, length(name) - 1))) as name
+from Users
+order by user_id;
+
+-- Problem 1484: Group Sold Products By The Date
+-- Write an SQL query to find for each date the number of different 
+-- products sold and their names.
+-- The sold products names for each date should be sorted lexicographically.
+-- Return the result table ordered by sell_date.
+
+select
+    sell_date,
+    count(distinct(product)) as num_sold,
+    group_concat(distinct(product) separator ',') as products
+from Activities
+group by sell_date
+order by sell_date, products; 
