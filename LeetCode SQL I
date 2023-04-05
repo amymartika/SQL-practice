@@ -116,3 +116,66 @@ select
 from Patients
 where conditions like 'DIAB1%'
     or conditions like '% DIAB1%';
+
+-- Problem 1965: Employees With Missing Information
+-- Write an SQL query to report the IDs of all the employees with missing
+-- information. The information of an employee is missing if 1) the employee's
+-- name is missing, or 2) the employee's salary is missing. 
+-- Return the result table ordered by employee_id in ascending order.
+
+select
+    e.employee_id
+from Employees as e
+left join Salaries as s
+on e.employee_id = s.employee_id
+    where s.salary is null
+union
+select 
+    s.employee_id
+from Salaries as s
+left join Employees as e
+on s.employee_id = e.employee_id
+    where e.name is null
+order by employee_id;
+
+-- Problem 1795: Rearrange Products Table
+-- Write an SQL query to rearrange the Products table so that each row
+-- has (product_id, store, price). If a product is not available in a
+-- store, do not include a row with that product_id and store combination
+-- in the result table. 
+-- Return the result table in any order.
+
+select
+    product_id,
+    'store1' as store,
+    store1 as price
+from Products
+where store1 is not null
+union
+select
+    product_id,
+    'store2' as store,
+    store2 as price
+from Products
+where store2 is not null
+union
+select
+    product_id,
+    'store3' as store,
+    store3 as price
+from Products
+where store3 is not null
+order by product_id;
+
+-- Problem 608: Tree Node
+-- Write an SQL query to report the type of each node in the tree.
+-- Return the result table in any order. 
+
+select 
+    id, 
+    case 
+        when p_id is null then 'Root'
+        when id in (select p_id from Tree) then 'Inner'
+        else 'Leaf'
+    end as type
+from Tree;
