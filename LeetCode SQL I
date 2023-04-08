@@ -179,3 +179,33 @@ select
         else 'Leaf'
     end as type
 from Tree;
+
+-- Problem 176: Second Highest Salary
+-- Write an SQL query to report the second highest salary from
+-- the Employee table. If there is no second highest salary,
+-- the query should report null. 
+
+select ifnull(
+    null,
+    (
+    select 
+        distinct salary
+    from Employee
+    order by salary desc
+    limit 1, 1)
+) as SecondHighestsalary;
+
+-- Problem 175: Combine Two Tables
+-- Write an SQL query to report the first name, last name, city,
+-- and state of each person in the Person table. If the address 
+-- of a personID is not present in the Address table, report
+-- null instead.
+
+select
+    p.firstName,
+    p.lastName,
+    a.city,
+    a.state
+from Person as p
+left join Address as a
+on p.personId = a.personId;
