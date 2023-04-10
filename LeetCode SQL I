@@ -209,3 +209,31 @@ select
 from Person as p
 left join Address as a
 on p.personId = a.personId;
+
+-- Problem 1581: Customer Who Visited but Did Not Make Any Transactions
+-- Write a SQL query to find the IDs of the users who visited without
+-- making any transactions and the number of times they made these
+-- types of visits. 
+-- Return the result table sorted in any order.
+
+select
+    v.customer_id,
+    count(v.visit_id) as count_no_trans
+from Visits as v
+left join Transactions as T
+on v.visit_id = t.visit_id
+where v.visit_id not in (
+    select visit_id from Transactions
+)
+group by v.customer_id;
+
+-- Problem 1148: Article Views I
+-- Write an SQL query to find all the authors that viewed at least one
+-- of their own articles. 
+-- Return the result table sorted by id in ascending order. 
+
+select 
+    distinct author_id as id
+from Views
+where author_id = viewer_id
+order by author_id;
