@@ -249,3 +249,26 @@ from weather as new
 join weather as old
 on new.temperature > old.temperature
     and datediff(new.recordDate, old.recordDate) = 1;
+
+-- Problem 1683: Invalid Tweets
+-- Write an SQL query to find the IDs of the invalid tweets. The tweet
+-- is invalid if the number of characters used in the content of the
+-- tweet is strictly greater than 15. 
+-- Return the result table in any order. 
+
+select 
+    tweet_id
+from Tweets
+where length(content) > 15;
+
+-- Problem 1378: Replace Employee ID with the Unique Identifier
+-- Write an SQL query to show the unique ID of each user. If a user
+-- does not have a unique ID in place, just show 'null.' 
+-- Return the result table in any order. 
+
+select 
+    ifnull(u.unique_id, null) as unique_id,
+    e.name
+from Employees as e
+left join EmployeeUNI as u
+on e.id = u.id;
