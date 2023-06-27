@@ -272,3 +272,16 @@ select
 from Employees as e
 left join EmployeeUNI as u
 on e.id = u.id;
+
+-- Problem 1068: Product Sales Analysis I
+-- Write an SQL query that reports the product_name, year, and price
+-- for each sale_id in the Sales table. 
+-- Return the resulting table in any order. 
+
+select
+    p.product_name, 
+    s.year,
+    s.price 
+from Sales as s
+join Product as p
+on s.product_id = p.product_id;
