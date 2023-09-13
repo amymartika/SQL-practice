@@ -71,3 +71,36 @@ from employee
 group by total_earnings
 order by total_earnings desc
 limit 1;
+
+-- Challenge: Weather Observation Station 9
+-- Query the list of city names from STATION that do not start with vowels. 
+-- Your result cannot contain duplicates. 
+
+select 
+    distinct city
+from station 
+where city not like 'a%'
+    and city not like 'e%'
+    and city not like 'i%'
+    and city not like 'o%'
+    and city not like 'u%';
+
+-- Challenge: Weather Observation Station 11
+-- Query the list of city names from STATION that either do not start with 
+-- vowels or do not end with vowels. Your result cannot contain duplicates.
+
+select 
+    distinct city
+from station
+where city not regexp('^[aeiou]')
+    or city not regexp('[aeiou]$');
+
+-- Challenge: Weather Observation Station 12
+-- Query the list of city names from STATION that do not start with vowels
+-- and do not end with vowels. Your result cannot contain duplicates.
+
+select 
+    distinct city
+from station
+where city not regexp('^[aeiou]')
+    and city not regexp('[aeiou]$');
