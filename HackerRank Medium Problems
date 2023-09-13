@@ -21,3 +21,32 @@ on best_submissions.hacker_id = hackers.hacker_id
 group by hackers.hacker_id, hackers.name
 having sum(best_submissions.score) > 0
 order by sum(best_submissions.score) desc, hackers.hacker_id;
+
+-- Challenge: "The PADS"
+-- Generate the following two result sets: 
+-- 1. Query an alphabetically ordered list of all names in OCCUPATIONS immediately
+-- followed by the first letter of each profession as a parenthetical. For example:
+-- AnActorName(A), ADoctorName (D), AProfessorName(P), and ASingerName(S). 
+-- 2. Query the number of occurrences of each occupation in OCCUPATIONS. Sort 
+-- the occureences in ascending order, and output them in the following format: 
+-- "There are a total of [occupation_count] [occupation]s.", where occupation_count
+-- is the number of occurrences in an occpuation in OCCUPATIONS and occupation is the
+-- lowercase occupation name. If more than one occupation has the same 
+-- occupation_count, they should be ordered alphabetically. 
+-- Note: There will be at least two entries in the table for each type of occupation. 
+
+-- Query 1
+select 
+    concat(o.name, '(', left(o.occupation, 1), ')') as name_occupation
+from occupations as o
+order by o.name;
+
+-- Query 2
+select 
+    concat('There are a total of ', count.occupation_count, ' ', lower(count.occupation), 's.') as totals from (
+select
+    occupation,
+    count(occupation) over (partition by occupation) as occupation_count
+from occupations) as count
+group by count.occupation
+order by count.occupation_count asc, count.occupation;
