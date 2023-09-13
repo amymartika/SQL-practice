@@ -1,5 +1,6 @@
 -- Challenge: "African Cities"
--- Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+-- Given the CITY and COUNTRY tables, query the names of all cities where the 
+-- CONTINENT is 'Africa'.
 
 select
     city.name
@@ -9,8 +10,9 @@ on city.countrycode = country.code
 where country.continent = 'Africa';
 
 -- Challenge: "Average Population of Each Continent"
--- Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) 
--- and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+-- Given the CITY and COUNTRY tables, query the names of all the continents 
+-- (COUNTRY.Continent) and their respective average city populations (CITY.Population) 
+-- rounded down to the nearest integer.
 
 select
     country.continent,
@@ -122,3 +124,67 @@ select
         else 'Isosceles'
     end as triangle_type
 from triangles;
+
+-- Challenge: "Weather Observation Station 2"
+-- Query the following two values from the STATION table: 
+-- 1. The sum of all values in lat_n rounded to a scale of 2 decimal places.
+-- 2. The sum of all values in long_w rounded to a scale of 2 decimal places.
+
+select 
+    round(sum(lat_n), 2), 
+    round(sum(long_w), 2)
+from station;
+
+-- Challenge: "Weather Observation Station 13"
+-- Query the sum of northern latitudes (lat_n) from STATION having values
+-- greater than 38.7880 and less than 137.2345. Truncate your answer to
+-- 4 decimal places. 
+
+select
+    round(sum(lat_n), 4)
+from station
+where lat_n > 38.7880
+    and lat_n < 137.2345;
+
+-- Challenge: "Weather Observation Station 14"
+-- Query the greatest value of the northern latitudes (lat_n) from STATION
+-- that is less than 137.2345. Truncate your answer to 4 decimal places. 
+
+select 
+    round(max(lat_n), 4)
+from station
+where lat_n < 137.2345;
+
+-- Challenge: "Weather Observation Station 15"
+-- Query the western longitude (long_w) for the largest northern_latitude (lat_n)
+-- in STATION that is less than 137.2345. Round your answer to 4 decimal places. 
+
+select
+    round(long_w, 4)
+from station
+where lat_n < 137.2345
+order by lat_n desc
+limit 1;
+
+-- Challenge: "Weather Observation Station 16"
+-- Query the smallest northern latitude (lat_n) from STATION that is greater
+-- than 38.7780. Round your answer to 4 decimal places. 
+
+select 
+    round(min(lat_n), 4)
+from station
+where lat_n > 38.7780;
+
+-- Challenge: "Weather Observation Station 17"
+-- Query the western longitude (long_w) where the smallest northern latitude (lat_n)
+-- in STATION is greater than 38.7780. Round your answer to 4 decimal places.
+
+select 
+    round(long_w, 4)
+from station
+where lat_n > 38.7780
+order by lat_n asc
+limit 1;
+
+
+
