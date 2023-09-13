@@ -72,7 +72,7 @@ group by total_earnings
 order by total_earnings desc
 limit 1;
 
--- Challenge: Weather Observation Station 9
+-- Challenge: "Weather Observation Station 9"
 -- Query the list of city names from STATION that do not start with vowels. 
 -- Your result cannot contain duplicates. 
 
@@ -85,7 +85,7 @@ where city not like 'a%'
     and city not like 'o%'
     and city not like 'u%';
 
--- Challenge: Weather Observation Station 11
+-- Challenge: "Weather Observation Station 11"
 -- Query the list of city names from STATION that either do not start with 
 -- vowels or do not end with vowels. Your result cannot contain duplicates.
 
@@ -95,7 +95,7 @@ from station
 where city not regexp('^[aeiou]')
     or city not regexp('[aeiou]$');
 
--- Challenge: Weather Observation Station 12
+-- Challenge: "Weather Observation Station 12"
 -- Query the list of city names from STATION that do not start with vowels
 -- and do not end with vowels. Your result cannot contain duplicates.
 
@@ -104,3 +104,21 @@ select
 from station
 where city not regexp('^[aeiou]')
     and city not regexp('[aeiou]$');
+
+-- Challenge: "Type of Triangle"
+-- Write a query identifying the type of each record in the TRIANGLES table
+-- using its three side lengths. Output one of the following statements
+-- for each record in the table: 
+-- #1: Equilateral: It's a triangle with 3 sides of equal length. 
+-- #2: Isoscles: It's a triangle with 2 sides of equal length. 
+-- #3: Scalene: It's a triangle with 3 sides of differing lengths. 
+-- #4: Not a Triangle: The given values of A, B, and C don't form a triangle.
+
+select
+    case
+        when A + B <= C or B + C <= A or A + C <= B then 'Not A Triangle'
+        when A = B and B = C and A = C then 'Equilateral'
+        when A != B  and B != C and A != C and A + B > C then 'Scalene'
+        else 'Isosceles'
+    end as triangle_type
+from triangles;
