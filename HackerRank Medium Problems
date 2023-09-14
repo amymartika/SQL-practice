@@ -1,5 +1,5 @@
 -- Challenge: "Contest Leaderboard"
--- The total socre of a hacker is the sum of their maximum scores for all of 
+-- The total score of a hacker is the sum of their maximum scores for all of 
 -- the challenges. Write a query to print the hacker_id, name, and total score 
 -- of the hackers ordered by the descending score. If more than one hacker achieved 
 -- the same total socre, then sort the result by ascending hacker_id. Exclude 
@@ -28,7 +28,7 @@ order by sum(best_submissions.score) desc, hackers.hacker_id;
 -- followed by the first letter of each profession as a parenthetical. For example:
 -- AnActorName(A), ADoctorName (D), AProfessorName(P), and ASingerName(S). 
 -- 2. Query the number of occurrences of each occupation in OCCUPATIONS. Sort 
--- the occureences in ascending order, and output them in the following format: 
+-- the occurrences in ascending order, and output them in the following format: 
 -- "There are a total of [occupation_count] [occupation]s.", where occupation_count
 -- is the number of occurrences in an occpuation in OCCUPATIONS and occupation is the
 -- lowercase occupation name. If more than one occupation has the same 
@@ -50,3 +50,37 @@ select
 from occupations) as count
 group by count.occupation
 order by count.occupation_count asc, count.occupation;
+
+-- Challenge: "SQL Project Planning"
+-- Write a query to output the start and end dates of projects listed by the 
+-- number of days it took to complete the project in ascending order. If there is
+-- more than on eproject that have the same number of completion days, then order
+-- by the start date of the project. 
+
+-- In progress query: 
+
+with project_duration as (
+select
+    task_id, 
+    start_date, 
+    end_date, 
+    datediff(end_date, start_date) as duration
+from projects), 
+
+days_between as (
+select
+    task_id,
+    datediff(start_date, lag(end_date, 1) over (
+        partition by task_id
+        order by start_date)) as days
+from projects
+)
+
+select 
+    p.start_date, 
+    p.end_date
+from project_duration as p
+join days_between as d
+on p.task_id = d.task_id
+where d.days > 1
+order by p.duration asc, p.start_date;
