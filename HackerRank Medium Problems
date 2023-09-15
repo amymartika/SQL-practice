@@ -57,30 +57,18 @@ order by count.occupation_count asc, count.occupation;
 -- more than on eproject that have the same number of completion days, then order
 -- by the start date of the project. 
 
--- In progress query: 
-
-with project_duration as (
+with project_group as (
 select
-    task_id, 
-    start_date, 
-    end_date, 
-    datediff(end_date, start_date) as duration
-from projects), 
-
-days_between as (
-select
-    task_id,
-    datediff(start_date, lag(end_date, 1) over (
-        partition by task_id
-        order by start_date)) as days
-from projects
-)
+    row_number() over (
+        order by start_date) + 
+        datediff(current_date(), start_date) as task_bucket, 
+    start_date,
+    end_date
+from projects)
 
 select 
-    p.start_date, 
-    p.end_date
-from project_duration as p
-join days_between as d
-on p.task_id = d.task_id
-where d.days > 1
-order by p.duration asc, p.start_date;
+    min(start_date) as start, 
+    max(end_date) as end
+from project_group
+group by task_bucket
+order by datediff(end, start), start;
