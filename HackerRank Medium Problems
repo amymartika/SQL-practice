@@ -58,13 +58,13 @@ order by count.occupation_count asc, count.occupation;
 -- by the start date of the project. 
 
 with project_group as (
-select
-    row_number() over (
-        order by start_date) + 
-        datediff(current_date(), start_date) as task_bucket, 
-    start_date,
-    end_date
-from projects)
+    select
+        row_number() over (
+            order by start_date) + 
+            datediff(current_date(), start_date) as task_bucket, 
+        start_date,
+        end_date
+    from projects)
 
 select 
     min(start_date) as start, 
@@ -72,3 +72,47 @@ select
 from project_group
 group by task_bucket
 order by datediff(end, start), start;
+
+-- Challenge: "Occupations"
+-- Pivot the occupation column in OCCUPATIONS so that each name is sorted
+-- alphabetically and displayed underneath its corresponding occupation. 
+-- The output column headers should be doctor, professor, singer, and 
+-- actor, respectively. 
+
+with titles as (
+    select
+        name, 
+        occupation, 
+        if(occupation = 'Doctor', name, null) as Doctor, 
+        if(occupation = 'Professor', name, null) as Professor,
+        if(occupation = 'Singer', name, null) as Singer,
+        if(occupation = 'Actor', name, null) as Actor, 
+        row_number() over (
+            partition by occupation 
+            order by name) as ordering
+    from occupations)
+    
+select 
+    max(Doctor) as Doctor, 
+    max(Professor) as Professor, 
+    max(Singer) as Singer, 
+    max(Actor) as Actor
+from titles
+group by ordering;
+
+-- Challenge: "Binary Tree Nodes"
+-- Write a query to find the node type of binary tree ordered by
+-- the value of the node. Output one of the following for each node: 
+-- 1. Root: If node is root node. 
+-- 2. Leaf: If node is leaf node.
+-- 3. Inner: If node is neither root nor leaf node. 
+
+select
+    n, 
+    case
+        when p is null then 'Root'
+        when n in (select p from bst) then 'Inner'
+        else 'Leaf'
+    end as type
+from bst
+order by n;
