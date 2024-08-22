@@ -1,9 +1,12 @@
--- Challenge: "Contest Leaderboard"
--- The total score of a hacker is the sum of their maximum scores for all of 
--- the challenges. Write a query to print the hacker_id, name, and total score 
--- of the hackers ordered by the descending score. If more than one hacker achieved 
--- the same total score, then sort the result by ascending hacker_id. Exclude 
--- all hackers with a total score of 0 from your result.
+/* 
+Challenge: "Contest Leaderboard"
+
+The total score of a hacker is the sum of their maximum scores for all of 
+the challenges. Write a query to print the hacker_id, name, and total score 
+of the hackers ordered by the descending score. If more than one hacker achieved 
+the same total score, then sort the result by ascending hacker_id. Exclude 
+all hackers with a total score of 0 from your result.
+*/ 
 
 select 
     hackers.hacker_id,
@@ -22,18 +25,23 @@ group by hackers.hacker_id, hackers.name
 having sum(best_submissions.score) > 0
 order by sum(best_submissions.score) desc, hackers.hacker_id;
 
--- Challenge: "The PADS"
--- Generate the following two result sets: 
--- 1. Query an alphabetically ordered list of all names in OCCUPATIONS immediately
--- followed by the first letter of each profession as a parenthetical. For example:
--- AnActorName(A), ADoctorName (D), AProfessorName(P), and ASingerName(S). 
--- 2. Query the number of occurrences of each occupation in OCCUPATIONS. Sort 
--- the occurrences in ascending order, and output them in the following format: 
--- "There are a total of [occupation_count] [occupation]s.", where occupation_count
--- is the number of occurrences in an occpuation in OCCUPATIONS and occupation is the
--- lowercase occupation name. If more than one occupation has the same 
--- occupation_count, they should be ordered alphabetically. 
--- Note: There will be at least two entries in the table for each type of occupation. 
+/* 
+Challenge: "The PADS"
+
+Generate the following two result sets: 
+1. Query an alphabetically ordered list of all names in OCCUPATIONS immediately
+followed by the first letter of each profession as a parenthetical. For example:
+AnActorName(A), ADoctorName (D), AProfessorName(P), and ASingerName(S). 
+
+2. Query the number of occurrences of each occupation in OCCUPATIONS. Sort 
+the occurrences in ascending order, and output them in the following format: 
+"There are a total of [occupation_count] [occupation]s.", where occupation_count
+is the number of occurrences in an occpuation in OCCUPATIONS and occupation is the
+lowercase occupation name. If more than one occupation has the same 
+occupation_count, they should be ordered alphabetically. 
+
+Note: There will be at least two entries in the table for each type of occupation. 
+*/ 
 
 -- Query 1
 select 
@@ -51,11 +59,14 @@ from occupations) as count
 group by count.occupation
 order by count.occupation_count asc, count.occupation;
 
--- Challenge: "SQL Project Planning"
--- Write a query to output the start and end dates of projects listed by the 
--- number of days it took to complete the project in ascending order. If there is
--- more than on eproject that have the same number of completion days, then order
--- by the start date of the project. 
+/* 
+Challenge: "SQL Project Planning"
+
+Write a query to output the start and end dates of projects listed by the 
+number of days it took to complete the project in ascending order. If there is
+more than on eproject that have the same number of completion days, then order
+by the start date of the project. 
+*/ 
 
 with project_group as (
     select
@@ -73,11 +84,14 @@ from project_group
 group by task_bucket
 order by datediff(end, start), start;
 
--- Challenge: "Occupations"
--- Pivot the occupation column in OCCUPATIONS so that each name is sorted
--- alphabetically and displayed underneath its corresponding occupation. 
--- The output column headers should be doctor, professor, singer, and 
--- actor, respectively. 
+/* 
+Challenge: "Occupations"
+
+Pivot the occupation column in OCCUPATIONS so that each name is sorted
+alphabetically and displayed underneath its corresponding occupation. 
+The output column headers should be doctor, professor, singer, and 
+actor, respectively. 
+*/ 
 
 with titles as (
     select
@@ -100,12 +114,16 @@ select
 from titles
 group by ordering;
 
--- Challenge: "Binary Tree Nodes"
--- Write a query to find the node type of binary tree ordered by
--- the value of the node. Output one of the following for each node: 
--- 1. Root: If node is root node. 
--- 2. Leaf: If node is leaf node.
--- 3. Inner: If node is neither root nor leaf node. 
+/* 
+Challenge: "Binary Tree Nodes"
+
+Write a query to find the node type of binary tree ordered by
+the value of the node. Output one of the following for each node: 
+
+1. Root: If node is root node. 
+2. Leaf: If node is leaf node.
+3. Inner: If node is neither root nor leaf node. 
+*/ 
 
 select
     n, 
@@ -116,3 +134,39 @@ select
     end as type
 from bst
 order by n;
+
+/* 
+Challenge: "New Companies" 
+
+Write a query to print the company code, founder name, total
+number of lead managers, total number of senior managers, total
+number of managers, and total number of employees. 
+Order your output by ascending copmany code. 
+*/ 
+
+select 
+    c.company_code, 
+    c.founder, 
+    count(distinct l.lead_manager_code) as total_lead_managers,
+    count(distinct s.senior_manager_code) as total_senior_managers, 
+    count(distinct m.manager_code) as total_managers, 
+    count(distinct e.employee_code) as total_employees
+from company as c
+
+left join lead_manager as l
+on l.company_code = c.company_code
+
+left join senior_manager as s
+on s.company_code = c.company_code
+
+left join manager as m
+on m.company_code = c.company_code
+
+left join employee as e
+on e.company_code = c.company_code
+
+group by 
+    c.company_code, 
+    c.founder
+
+order by c.company_code
