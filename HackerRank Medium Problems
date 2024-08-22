@@ -1,11 +1,12 @@
 /* 
 Challenge: "Contest Leaderboard"
 
-The total score of a hacker is the sum of their maximum scores for all of 
-the challenges. Write a query to print the hacker_id, name, and total score 
-of the hackers ordered by the descending score. If more than one hacker achieved 
-the same total score, then sort the result by ascending hacker_id. Exclude 
-all hackers with a total score of 0 from your result.
+- The total score of a hacker is the sum of their maximum scores for all of the challenges. 
+- Write a query to print the hacker_id, name, and total score of the hackers ordered 
+by the descending score. 
+- If more than one hacker achieved the same total score, then sort the result 
+by ascending hacker_id. 
+- Exclude all hackers with a total score of 0 from your result.
 */ 
 
 select 
@@ -62,10 +63,10 @@ order by count.occupation_count asc, count.occupation;
 /* 
 Challenge: "SQL Project Planning"
 
-Write a query to output the start and end dates of projects listed by the 
-number of days it took to complete the project in ascending order. If there is
-more than on eproject that have the same number of completion days, then order
-by the start date of the project. 
+- Write a query to output the start and end dates of projects listed by the 
+number of days it took to complete the project in ascending order. 
+- If there is more than one project that have the same number of completion days, 
+then order by the start date of the project. 
 */ 
 
 with project_group as (
@@ -87,9 +88,9 @@ order by datediff(end, start), start;
 /* 
 Challenge: "Occupations"
 
-Pivot the occupation column in OCCUPATIONS so that each name is sorted
+- Pivot the occupation column in OCCUPATIONS so that each name is sorted
 alphabetically and displayed underneath its corresponding occupation. 
-The output column headers should be doctor, professor, singer, and 
+- The output column headers should be doctor, professor, singer, and 
 actor, respectively. 
 */ 
 
@@ -138,10 +139,10 @@ order by n;
 /* 
 Challenge: "New Companies" 
 
-Write a query to print the company code, founder name, total
+- Write a query to print the company code, founder name, total
 number of lead managers, total number of senior managers, total
 number of managers, and total number of employees. 
-Order your output by ascending copmany code. 
+- Order your output by ascending copmany code. 
 */ 
 
 select 
@@ -169,4 +170,54 @@ group by
     c.company_code, 
     c.founder
 
-order by c.company_code
+order by c.company_code; 
+
+/* 
+The Challenge: "The Report" 
+
+- Generate a report containing three columns: Name, Grade, and Mark. 
+- Exclude the names of students who received a grade lower than 8. 
+- The report must be in descending order by grade. 
+- If there is more than on estudent with the same grade assigned to them, 
+order those students by their name alphabetically. 
+- If the grade is lower than 8, use "null" as their name and list
+them by their grades in descending order. 
+- If there is more than one student with the same grade assigned to them, 
+order those students by their marks in ascending order. 
+
+select
+    case
+        when s.marks >= 70 then s.name
+        else null
+    end as name,
+    case
+        when s.marks between 0 and 9 then 1
+        when s.marks between 10 and 19 then 2
+        when s.marks between 20 and 29 then 3
+        when s.marks between 30 and 39 then 4
+        when s.marks between 40 and 49 then 5
+        when s.marks between 50 and 59 then 6
+        when s.marks between 60 and 69 then 7
+        when s.marks between 70 and 79 then 8
+        when s.marks between 80 and 89 then 9
+        when s.marks between 90 and 100 then 10
+        else null
+    end as grade,
+    s.marks as mark
+from students as s
+
+order by 
+    case
+        when grade = 10 then 1
+        when grade = 9 then 2
+        when grade = 8 then 3
+        when grade = 7 then 4
+        when grade = 6 then 5
+        when grade = 5 then 6
+        when grade = 4 then 7
+        when grade = 3 then 8
+        when grade = 2 then 9
+        when grade = 1 then 10
+    end,
+    s.name, 
+    mark desc; 
